@@ -1,0 +1,512 @@
+uspec.N <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)),mean.model = list(armaOrder = c(1,0), nclude.mean = TRUE), distribution.model = "norm")
+(fit.N <- ugarchfit(spec = uspec.N, data = X))
+fit.N <- ugarchfit(spec = uspec.N, data = X)
+alpha <- 0.99
+## Compute 1-day VaR
+fspec <- getspec(mod2)
+uspec.N <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)),mean.model = list(armaOrder = c(1,0), nclude.mean = TRUE), distribution.model = "norm")
+mod2 <- ugarchfit(spec = uspec.N, data = X)
+alpha <- 0.99
+## Compute 1-day VaR
+fspec <- getspec(mod2)
+setfixed(fspec) <- as.list(coef(mod2))
+pred1 <- ugarchforecast(fspec, data = X, n.ahead = 1) # predict from the fitted process
+VaR1 <- as.numeric(quantile(pred1, probs = alpha))
+## Compute 10-day VaR
+setfixed(fspec) <- as.list(coef(mod2))
+pred10 <- ugarchforecast(fspec, data = X, n.ahead = 10) # predict from the fitted process
+VaR10 <- as.numeric(quantile(pred10, probs = alpha))[10]
+## Results
+cat("99% 1-day VaR for a long position of $1 million:", VaR1 * 1000000, "\n")
+cat("99% 10-day VaR for a long position of $1 million:", VaR10 * sqrt(10) *1000000, "\n")
+alpha <- 0.99
+## Compute 1-day VaR
+fspec <- getspec(mod1)
+setfixed(fspec) <- as.list(coef(mod1))
+pred1 <- ugarchforecast(fspec, data = X, n.ahead = 1) # predict from the fitted process
+VaR1 <- as.numeric(quantile(pred1, probs = alpha))
+## Compute 10-day VaR
+setfixed(fspec) <- as.list(coef(mod1))
+pred10 <- ugarchforecast(fspec, data = X, n.ahead = 10) # predict from the fitted process
+VaR10 <- as.numeric(quantile(pred10, probs = alpha))[10]
+## Results
+cat("99% 1-day VaR for a long position of $1 million:", VaR1 * 1000000, "\n")
+cat("99% 10-day VaR for a long position of $1 million:", VaR10 * sqrt(10) *1000000, "\n")
+uspec.N <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)),mean.model = list(armaOrder = c(1,0), include.mean = TRUE), distribution.model = "norm")
+mod2 <- ugarchfit(spec = uspec.N, data = X)
+alpha <- 0.99
+## Compute 1-day VaR
+fspec <- getspec(mod2)
+setfixed(fspec) <- as.list(coef(mod2))
+pred1 <- ugarchforecast(fspec, data = X, n.ahead = 1) # predict from the fitted process
+VaR1 <- as.numeric(quantile(pred1, probs = alpha))
+## Compute 10-day VaR
+setfixed(fspec) <- as.list(coef(mod2))
+pred10 <- ugarchforecast(fspec, data = X, n.ahead = 10) # predict from the fitted process
+VaR10 <- as.numeric(quantile(pred10, probs = alpha))[10]
+## Results
+cat("99% 1-day VaR for a long position of $1 million:", VaR1 * 1000000, "\n")
+cat("99% 10-day VaR for a long position of $1 million:", VaR10 * sqrt(10) *1000000, "\n")
+uspec.AR <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)),mean.model = list(armaOrder = c(1,1), include.mean = TRUE), distribution.model = "norm")
+mod2 <- ugarchfit(spec = uspec.AR, data = X)
+uspec.AR <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)),mean.model = list(armaOrder = c(1,1), include.mean = TRUE), distribution.model = "norm")
+mod3 <- ugarchfit(spec = uspec.AR, data = X)
+alpha <- 0.99
+## Compute 1-day VaR
+fspec <- getspec(mod3)
+setfixed(fspec) <- as.list(coef(mod3))
+pred1 <- ugarchforecast(fspec, data = X, n.ahead = 1) # predict from the fitted process
+VaR1 <- as.numeric(quantile(pred1, probs = alpha))
+## Compute 10-day VaR
+setfixed(fspec) <- as.list(coef(mod3))
+pred10 <- ugarchforecast(fspec, data = X, n.ahead = 10) # predict from the fitted process
+VaR10 <- as.numeric(quantile(pred10, probs = alpha))[10]
+## Results
+cat("99% 1-day VaR for a long position of $1 million:", VaR1 * 1000000, "\n")
+cat("99% 10-day VaR for a long position of $1 million:", VaR10 * sqrt(10) *1000000, "\n")
+uspec.AR <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)),mean.model = list(armaOrder = c(1,1), include.mean = TRUE), distribution.model = "std")
+mod3 <- ugarchfit(spec = uspec.AR, data = X)
+alpha <- 0.99
+## Compute 1-day VaR
+fspec <- getspec(mod3)
+setfixed(fspec) <- as.list(coef(mod3))
+pred1 <- ugarchforecast(fspec, data = X, n.ahead = 1) # predict from the fitted process
+VaR1 <- as.numeric(quantile(pred1, probs = alpha))
+## Compute 10-day VaR
+setfixed(fspec) <- as.list(coef(mod3))
+pred10 <- ugarchforecast(fspec, data = X, n.ahead = 10) # predict from the fitted process
+VaR10 <- as.numeric(quantile(pred10, probs = alpha))[10]
+## Results
+cat("99% 1-day VaR for a long position of $1 million:", VaR1 * 1000000, "\n")
+cat("99% 10-day VaR for a long position of $1 million:", VaR10 * sqrt(10) *1000000, "\n")
+alpha <- 0.99
+## Compute 1-day VaR
+fspec <- getspec(mod3)
+setfixed(fspec) <- as.list(coef(mod3))
+pred1 <- ugarchforecast(fspec, data = X, n.ahead = 1) # predict from the fitted process
+VaR1 <- as.numeric(quantile(pred1, probs = alpha))
+## Compute 10-day VaR
+setfixed(fspec) <- as.list(coef(mod3))
+pred10 <- ugarchforecast(fspec, data = X, n.ahead = 10) # predict from the fitted process
+VaR10 <- as.numeric(quantile(pred10, probs = alpha))[10]
+## Results
+cat("99% 1-day VaR for a long position of $1 million ARMA(1,1)-GARCH(1,1) with T-distribution:", VaR1 * 1000000, "\n")
+cat("99% 10-day VaR for a long position of $1 million ARMA(1,1)-GARCH(1,1) with T-distribution:", VaR10 * sqrt(10) *1000000, "\n")
+Y <- sample(1:2,size=100,prob=c(0.2,0.8),replace=TRUE)
+X <- rep(NA,100)
+X[Y==1]<- t_noncentral(length(which(Y==1)),4,2)
+box_muller_normal<- function(n){
+u1 <- runif(n/2)
+u2 <- runif(n/2)
+x1 <- sqrt(-2*log(u1))*cos(2*pi*u2)
+x2 <- sqrt(-2*log(u1))*sin(2*pi*u2)
+x <- c(x1,x2)
+return(x)
+}
+chi_square <- function(n, a){
+x<-box_muller_normal(n*a)
+A<- matrix(x^2, ncol=a)
+y<- apply(A,1,sum)
+return(y)
+}
+t_noncentral <- function(n,k,mu){
+z<-box_muller_normal(n)
+w<-chi_square(n,k)
+t <- (z+mu)/(sqrt(w/k))
+return(t)
+}
+my_exp <- function(n) {
+u <- runif(n)
+x <- -log(1-(1-exp(-4))*u)/2
+return(x)
+}
+Y <- sample(1:2,size=100,prob=c(0.2,0.8),replace=TRUE)
+X <- rep(NA,100)
+X[Y==1]<- t_noncentral(length(which(Y==1)),4,2)
+X[Y==2]<- my_exp(length(which(Y==2)))
+X
+MC <- function(n){
+x <- rnorm(n)
+f<- sqrt(2/pi)*x*exp(-x^2/2)
+omega <- mean(f/dnorm(x))
+omega.var <- var(f/dnorm(x))/n
+return(list(omega=omega, omega.var = omega.var))
+}
+MC(1000)
+f <- function(x){sqrt(2/pi)*x*exp(-x^2/2)}
+integrate(f, 0,Inf)
+my.lm <- function(n, p){
+if (length(combn(p,2)) < n-1) {
+stop("Not enough samples")
+}
+data_interact <- c()
+for (i in 1:length(combn(p,2))) {
+for (j in (i+1):length(combn(p,2))) {
+name <- paste0("x", i, "*", "x", j)
+data_interact[, name] <- data_interact[, i] * data_interact[, j]
+}
+}
+X <- cbind(1, data_interact)
+beta.est <- solve(t(X) %*% X) %*% t(X) %*% y
+return(beta.est)
+}
+set.seed(123)
+m <- 1000
+n <- seq(80,150,10)
+p_val <-rep(0,length(m))
+power <- c()
+X<-c()
+Y<-c()
+for (k in 1:length(n)){
+for (i in 1:1000){
+x <- rbinom(1,n = n[k],p=0.3)
+y <- rbinom(1,n = n[k],p=0.45)
+X[i]<- sum(x)
+Y[i]<- sum(y)
+}
+p_test<-prop.test(X,Y)
+p_val[k] <- p_test$p.value
+power[k] <- mean(p_val < 0.05)
+}
+set.seed(123)
+m <- 1000
+n <- seq(80,150,10)
+p_val <-rep(0,length(m))
+power <- c()
+X<-c()
+Y<-c()
+for (k in 1:length(n)){
+for (i in 1:1000){
+x <- rbinom(1,n = n[k],p=0.3)
+y <- rbinom(1,n = n[k],p=0.45)
+X[i]<- sum(x)
+Y[i]<- sum(y)
+}
+p_test<-prop.test(X,Y)
+p_val[k] <- p_test$p.value
+power[k] <- mean(p_val < 0.05)
+}
+set.seed(123)
+m <- 1000
+n <- seq(80,150,10)
+p_val <-rep(0,length(m))
+power <- c()
+X<-c()
+Y<-c()
+for (k in 1:length(n)){
+for (i in 1:1000){
+x <- rbinom(1,n = n[k],p=0.3)
+y <- rbinom(1,n = n[k],p=0.45)
+X[i]<- sum(x)
+Y[i]<- sum(y)
+}
+p_test<-prop.test(X,Y)
+p_val[k] <- p_test$p.value
+power[k] <- mean(p_val < 0.05)
+}
+library(bioMetaLin)
+use_sample_data()
+devtools::document()
+setwd("~/bioMetaLin/R")
+devtools::document()
+use_sample_data()
+df<-use_sample_data()
+P_matrix(df)
+P_matrix(df,stat_tests = T)
+fisher(df)
+devtools::document()
+fisher(df)
+fisher(df,p.adj='fdr')
+fisher(df,p.adj='boneferoni')
+fisher(df,p.adj='bonferroni')
+P_matrix(df,stat_tests = T)
+devtools::document()
+stouffers(df)
+devtools::document()
+stouffers(df,"fdr")
+lancaster(df)
+devtools::document()
+lancaster(df)
+devtools::document()
+fisher(df,p.adj='bonferroni')
+devtools::document()
+devtools::document()
+fisher(df)
+pmat <- P_matrix()
+pmat <- P_matrix(df)
+fisher_method <- function(p_values) {
+-2 * sum(log(p_values))
+}
+apply(pmat,1,fisher_method)
+lapply(pmat,1,fisher_method)
+devtools::document()
+fisher(df)
+devtools::document()
+fisher(df)
+devtools::document()
+stouffers(df)
+devtools::document()
+maxP(df)
+devtools::document()
+maxP(df)
+devtools::document()
+devtools::document()
+maxP(df)
+devtools::document()
+minP(df)
+devtools::document()
+minP(df)
+devtools::document()
+minP(df)
+devtools::document()
+lancaster(df)
+devtools::document()
+lancaster(df)
+sample_sizes[1, ] <- unname(sqrt(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1])
+datalist <- use_sample_data()
+sample_sizes[1, ] <- unname(sqrt(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1])
+sample_sizes <-c()
+sample_sizes[1, ] <- unname(sqrt(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1])
+devtools::document()
+lancaster(df)
+devtools::document()
+lancaster(df)
+sample_size[i,] <- unname(sapply(datalist[[i]], function(df) sum(complete.cases(df))))[-1]
+sample_size[1,] <- unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1]
+lancaster <- function(datalist) {
+pmat <- P_matrix(datalist)
+sample_size <- matrix()
+p_value <- c()
+total_df <- c()
+chi_square_sum <- c()
+for (i in 1:nrow(pmat)){
+sample_size[i,] <- unname(sapply(datalist[[i]], function(df) sum(complete.cases(df))))[-1]
+}
+}
+sample_size[i,] <- unname(sapply(datalist[[i]], function(df) sum(complete.cases(df))))[-1]
+sample_size[1,] <- unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1]
+sample_size <- matrix()
+sample_size[1,] <- unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1]
+unname(sapply(datalist[[i]], function(df) sum(complete.cases(df))))[-1]
+unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1]
+View(df)
+unname(sapply(datalist[[i]], function(df) sum(complete.cases(df))))
+unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))
+unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))
+unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))[-1]
+unname(sapply(datalist[[1]], function(df) sum(complete.cases(df))))
+pmat <- P_matrix(datalist)
+sample_size <- matrix()
+p_value <- c()
+total_df <- c()
+chi_square_sum <- c()
+for (i in 1:ncol(pmat)){
+sample_size[,i] <- unname(sapply(datalist[[i]], function(df) sum(complete.cases(df))))
+}
+sample_size
+pmat <- P_matrix(datalist)
+pmat
+sample_size <- matrix()
+p_value <- c()
+total_df <- c()
+chi_square_sum <- c()
+for (i in 1:ncol(pmat)){
+sample_size[,i] <- unname(sapply(datalist[[i]], function(df) sum(complete.cases(df))))
+}
+datalist[[1]]
+pmat <- P_matrix(datalist)
+sample_size <- matrix()
+p_value <- c()
+total_df <- c()
+chi_square_sum <- c()
+for (i in 1:ncol(pmat)){
+sample_size[,i] <- unname(sapply(datalist[[i]], function(df) length(complete.cases(df))))
+}
+unname(sapply(datalist[[1]], function(df) length(complete.cases(df))))
+sample_size[,1] <- unname(sapply(datalist[[1]], function(df) length(complete.cases(df))))
+sample[,1] <- c(1,2,3,4)
+sample_size <- matrix(NA,row=nrow(pmat),col=ncol(pmat))
+?matrix()
+sample_size <- matrix(NA,nrow=nrow(pmat),ncol=ncol(pmat))
+sample_size[,1] <- unname(sapply(datalist[[1]], function(df) length(complete.cases(df))))
+sample[,1] <- c(1,2,3,4,5)
+sample_size[,1] <- c(1,2,3,4,5)
+sample_size
+sample_size[,1] <- unname(sapply(datalist[[1]], function(df) length(complete.cases(df))))
+unname(sapply(datalist[[1]], function(df) length(complete.cases(df))))
+x<-unname(sapply(datalist[[1]], function(df) length(complete.cases(df))))
+type(x)
+length(x)
+x[1]
+x<-x[-1]
+sample_size[,1]<-x
+sample_size[,1] <- unname(sapply(datalist[[1]], function(df) length(complete.cases(df))))[-1]
+devtools::document()
+lancaster(df)
+devtools::document()
+lancaster(df)
+devtools::load_all()
+lancaster(df)
+lancaster <- function(datalist) {
+pmat <- P_matrix(datalist)
+sample_size <- matrix(NA,nrow=nrow(pmat),ncol=ncol(pmat))
+p_value <- c()
+total_df <- c()
+t_stat <- c()
+for (i in 1:ncol(pmat)){
+sample_size[,i] <- unname(sapply(datalist[[i]], function(df) length(complete.cases(df))))[-1]
+}
+for (i in 1:nrow(pmat)){
+t_stat[i] <- sum((qchisq(alpha, df = sample_size[i,])) *(1-pmat[i,]))
+p_value[i] <- 1 - pchisq(t_stat[i],df=sum(sample_size[i,]))
+}
+return(list(t_stat= t_stat, p_value = p_value, total_df = total_df))
+}
+lancaster(df)
+devtools::document()
+lancaster(df)
+df<-use_sample_data()
+lancaster(df)
+df<-use_sample_data()
+devtools::document()
+lancaster(df)
+devtools::document()
+lancaster(df)
+pmat <- P_matrix(datalist)
+datalist <- use_sample_data()
+pmat <- P_matrix(datalist)
+(qchisq(pmat[1,], df = sample_size[i,])
+1
+qchisq(pmat[1,], df = sample_size[i,])
+for (i in 1:ncol(pmat)){
+sample_size[,i] <- unname(sapply(datalist[[i]], function(df) length(complete.cases(df))))[-1]
+}
+sample_size <- matrix(NA,nrow=nrow(pmat),ncol=ncol(pmat))
+p_value <- c()
+t_stat <- c()
+for (i in 1:ncol(pmat)){
+sample_size[,i] <- unname(sapply(datalist[[i]], function(df) length(complete.cases(df))))[-1]
+}
+qchisq(pmat[i,], df = sample_size[i,])
+sum(qchisq(pmat[i,], df = sample_size[i,]))
+183.32+139.4622+304.2705
+devtools::document()
+lancaster(df)
+lancaster(df)
+devtools::document()
+lancaster(df)
+w <- c()
+w[i,] <- sample_szie[1,]/sum(sample_size[1,])
+w[1,] <- sample_size[1,]/sum(sample_size[1,])
+w <- matrix(NA,nrow=nrow(pmat),ncol=ncol(pmat))
+w <- matrix(NA,nrow=nrow(pmat),ncol=ncol(pmat))
+w[1,] <- sample_size[1,]/sum(sample_size[1,])
+w
+lancaster(df)
+devtools::document()
+lancaster(df)
+devtools::document()
+lancaster(df)
+for (i in 1:row(pmat)){
+w[i,] <- sample_size[i,]/sum(sample_size[i,])
+}
+devtools::document()
+lancaster(df)
+devtools::document()
+lancaster(df)
+devtools::document()
+lancaster(df)
+w <- sqrt(sample_size)
+devtools::document()
+devtools::document()
+weighted_stouffer(df)
+devtools::document()
+weighted_stouffer(df)
+devtools::document()
+stouffers(df)
+devtools::document()
+stouffers(df)
+devtools::document()
+devtools::document()
+devtools::document()
+devtools::document()
+devtools::document()
+stouffers(df)
+weighted_stouffer(df)
+fisher(df)
+fisher(df,p.adj="fdr")
+fisher(df,p.adj="bonferroni")
+devtools::document()
+weighted_fisher_perm(df)
+setwd("~/bioMetaLin")
+library(bioMetaLin)
+devtools::document()
+use_vignette("bioMetaLin", title = "bioMetaLin")
+use_vignette("bioMetaLin", title = "bioMetaLin")
+library(devtools)
+use_vignette("bioMetaLin", title = "bioMetaLin")
+devtools::document()
+library(bioMetaLin)
+sample_data(p=100)
+df<-sample_data(p=100)
+df
+df<-sample_data(p=100)
+df$Data1
+df$Data2
+df$Data3
+devtools::document()
+p_matrix(df)
+determine_tests(df[[1]])
+devtools::document()
+p_vector(df[[1]])
+devtools::document()
+p_vector(df[[1]])
+p_vector(df[[1]],stat_tests = T)
+p_matrix(df)
+devtools::document()
+p_matrix(df)
+devtools::document()
+p_matrix(df)
+devtools::document()
+p_matrix(df)
+devtools::document()
+p_matrix(df)
+devtools::document()
+p_matrix(df)
+p_vector(df[[1]],stat_tests = T)
+p_vector(df[[1]],stat_tests = T)
+p_matrix(df)
+devtools::document()
+p_vector(df[[1]],stat_tests = T)
+p_vector(df[[1]],stat_tests = T)
+p_matrix(df)
+p_matrix(df, stat_tests = F)
+p_matrix(df, stat_tests = T)
+devtools::document()
+p_matrix(df, stat_tests = T)
+p_matrix(df)
+devtools::document()
+p_matrix(df)
+p_matrix(df, stat_tests = T)
+p.vector<-p_vector(df[[1]],stat_tests = T)
+p.vector$pvalue
+p.vector$test
+p.vector<-p_vector(df[[1]],stat_tests = T)
+p.vector$pvalue
+p.vector$test
+p_matrix$pvalue
+p.matrix<-p_matrix(df, stat_tests = T)
+p.matrix$pvalue
+p.matrix$test
+p.matrix
+devtools::document()
+p.matrix<-p_matrix(df, stat_tests = T)
+p.matrix$pvalue
+p.matrix$test
+p_matrix(df)
+p.matrix<-p_matrix(df, stat_tests = T)
+p.matrix$pvalue
+p.matrix$test
+setwd("~/bioMetaLin")
+version
+install.packages('bioMetaLin')

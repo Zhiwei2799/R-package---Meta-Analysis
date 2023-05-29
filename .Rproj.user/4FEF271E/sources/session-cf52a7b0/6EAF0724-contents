@@ -1,0 +1,168 @@
+sampledata <- function(p){
+  set.seed(123)
+  data1 <- data.frame(group = sample(1:3, 200, replace = TRUE),
+                      matrix(rnorm(p * 200), ncol = p))
+  data2 <- data.frame(group = sample(1:2, 150, replace = TRUE),
+                      matrix(rnorm(p * 150), ncol = p))
+  data3 <- data.frame(group = sample(1:4, 300, replace = TRUE),
+                      matrix(sample(0:2, size = 300 * p, replace = TRUE),
+                             ncol = p))
+  colnames(data1) <- c("group", paste("gene", 1:p, sep = ""))
+  colnames(data2) <- colnames(data3) <- colnames(data1)
+  return(list(Data1 = data1, Data2 = data2, Data3 = data3))
+}
+
+determine_tests <-function(df) {
+  n_groups <- length(unique(df$group))
+  pv1 <-c()
+  tests <- c()
+  if (is.numeric(df[,2])) {
+    if (n_groups > 2) {
+      for (i in 2:ncol(df)) {
+        sp <- c()
+        fp <- c()
+        for (j in 1:n_groups) {
+          sp[j] <- shapiro.test(df[df$group==j,i])$p.value
+          if (j > 1) {
+            fp[j-1] <- var.test(df[df$group==(j-1),i], df[df$group==j,i])$p.value
+          }
+        }
+        if(all(sp > 0.05) & all(fp > 0.05)) {
+          test <- aov(df[,i]~group, data=df)
+          pv1[i-1] <- summary(test)[[1]][["Pr(>F)"]][[1]]
+          tests[i-1] <- "anova"
+        } else {
+          pv1[i-1] <- kruskal.test(df[,i]~group,data=df)$p.value
+          tests[i-1] <- "kruskal"
+        }
+      }
+    } else {
+      for (i in 2:ncol(df)) {
+        sp1 <- shapiro.test(df[df$group==1,i])$p.value
+        sp2 <- shapiro.test(df[df$group==2,i])$p.value
+        fp <- var.test(df[df$group==1,i],df[df$group==2,i])$p.value
+        if(sp1>0.05&sp2>0.05&fp>0.05){
+          pv1[i-1] <- t.test(df[df$group==1,i],df[df$group==2,i],var.equal=TRUE)$p.value
+          tests[i-1] <- 'TtestEV'
+        } else if(sp1>0.05&sp2>0.05&fp<=0.05){
+          pv1[i-1] <- t.test(df[df$group==1,i],df[df$group==2,i],var.equal=FALSE)$p.value
+          tests[i-1] <- 'TtestUEV'
+        } else {
+          pv1[i-1] <- wilcox.test(df[df$group==1,i],df[df$group==2,i])$p.value
+          tests[i-1] <- 'Wilcox'
+        }
+      }
+    }
+  } else {
+    if (all(table(df$group) >= 20)){
+      for (i in 2:ncol(df)) {
+        chisq <- chisq.test(df[,i], df$group)
+        if (chisq$p.value < 0.05) {
+          tests[i-1] <- "chisq"
+          pv1[i-1] <- chisq$p.value
+        } else {
+          tests[i-1] <- "Fisher"
+          fisher <- fisher.test(df[,i], df$group, simulate.p.value=TRUE)
+          pv1[i-1] <- fisher$p.value
+        }
+      }
+    }
+  }
+  return(list(pvalue = pv1, test= tests))
+}
+
+test_list <- function(datalist) {
+  pvalues <- list()
+  for (i in 1:length(datalist)) {
+    data <- datalist[i]
+    tests <- determine_tests(data)
+    pvalues[i] <- tests$pvalue
+  }
+  pmat <- do.call(cbind, pvalues)
+  colnames(pmat) <- names(datalist)
+  return(pmat[-1,])
+}
+
+fisher_method <- function(p_values) {
+  -2 * sum(log(p_values))
+}
+
+fisher <- function(datalist) {
+  pmat<-test_list(datalist)
+  fisher_stat <- apply(pmat,2,fisher_method)
+  df <- 2 * nrow(pmat)
+  p_value <- 1 - pchisq(fisher_stat, df)
+  cat("Fisher combined p-values:", p_value)
+}
+
+stouffers_method <- function(p_values) {
+  z_scores <- qnorm(1 - p_values/2)
+  weights <- sqrt(length(p_values))
+  z_sum <- sum(z_scores)/weights
+  p_value <- pnorm(z_sum)
+  return(list(test_statistic = z_sum, p_value = p_value))
+}
+
+stouffers<- function(datalist){
+  pmat<-test_list(datalist)
+  stouffers_result<-apply(pmat, 2, stouffers_method)
+  cat("Stouffer's combined test statistic:", stouffers_result[[1]]$test_statistic, "\n")
+  cat("Stouffer's combined p-value:", stouffers_result[[1]]$p_value)
+}
+
+weighted.stouffer <- function(pvalues) {
+  sample_sizes <- sapply(datalist, function(x) table(x$group))
+  sizes<- c()
+  for (i in 1:length(sample_sizes)){
+    sizes[i] <-sum(sample_sizes[[i]])
+  }
+  p<-c()
+  for (i in 1:length(sizes)){
+    weights <- sqrt(sizes[i]) / sum(sqrt(sizes[i]))
+    zscores <- qnorm(1 - pvalues/2)
+    weighted.z <- sum(weights * zscores)
+    combined.p <- 2 * (1 - pnorm(abs(weighted.z)))
+    p<-c(p,combined.p)
+  }
+  return(p)
+}
+
+weighted_stouffer <- function(datalist){
+  pmat <- test_list(datalist)
+  result <- apply(pmat, 2, weighted.stouffer)
+  cat("Weighted stouffer's p-value:", result)
+}
+
+lancaster <- function(datalist) {
+  pmat <- test_list(datalist)
+  combined.p <- apply(pmat, 2, function(x) {
+    logp <- -log(x)
+    mean(logp) / sum(logp)
+  })
+  return(combined.p)
+}
+
+minP <- function(datalist) {
+  pmat <- test_list(datalist)
+  min_p <- apply(pmat, 2, min)
+  return(min_p)
+}
+
+maxP <- function(datalist) {
+  pmat <- test_list(datalist)
+  maxp <- apply(pmat, 2, max)
+  adjp <- pmin(1, length(maxp) * maxp)
+  return(adjp)
+}
+
+weighted_fisher <- function(datalist) {
+  pmat <- test_list(datalist)
+  n <- nrow(pmat)
+  samplesizes <- sapply(datalist, function(x) sum(table(x$group)))
+  weights <- sqrt(samplesizes) / sum(sqrt(samplesizes))
+  weighted.p <- -2 * rowSums(weights * log(pmat))
+  combined.p <- pchisq(weighted.p, df = 2 * n, lower.tail = FALSE, log.p = FALSE)
+  return(combined.p)
+}
+
+

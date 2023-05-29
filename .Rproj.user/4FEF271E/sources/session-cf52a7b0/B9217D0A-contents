@@ -1,0 +1,51 @@
+#' #' Title
+#' #'
+#' #' @param datalist
+#' #'
+#' #' @return
+#' #' @export
+#' #'
+#' #' @examples
+# Assume datalist is a list of data sets with the same variables
+# First define a function to calculate the weighted Fisher test statistic
+weighted_fisher <- function(datalist){
+  pmat <- p_matrix(datalist)
+  sample_size <- matrix(NA,nrow=nrow(pmat),ncol=ncol(pmat))
+  p_value <- c()
+  statistic <- c()
+  w <- matrix(NA,nrow=nrow(pmat),ncol=ncol(pmat))
+  for (i in 1:ncol(pmat)){
+    sample_size[,i] <- unname(sapply(datalist[[i]], function(df) length(complete.cases(df))))[-1]
+  }
+  for (i in 1:nrow(pmat)){
+    w[i,] <- sample_size[i,]/sum(sample_size[i,])
+  }
+  for (i in 1:nrow(pmat)){
+    statistic[i] <- sum(w[i,]*(-2*log(pmat[i,])))
+  }
+  B = 1000
+  perm_stats <- vector(length=B)
+  for (i in 1:B) {
+    perm_datalist <- lapply(datalist, function(df) df[sample(nrow(df)), ])
+    perm_pmat <- p_matrix(perm_datalist)
+    perm_statistic <- rep(NA, nrow(perm_pmat))
+    for (j in 1:nrow(perm_pmat)) {
+      perm_statistic[j] <- sum(w[j,] * (-2 * log(perm_pmat[j,])))
+    }
+    perm_stats[i] <- max(perm_statistic)
+  }
+  observed_stat <- apply(pmat, 1, function(p_values) sum(w * (-2 * log(p_values))))
+  p_value <- mean(perm_stats >= observed_stat)
+  return(list(statistic = observed_stat, p_value = p_value))
+}
+
+
+
+
+
+
+
+
+
+
+

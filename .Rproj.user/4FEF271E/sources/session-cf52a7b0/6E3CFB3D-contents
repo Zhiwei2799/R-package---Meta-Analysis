@@ -1,0 +1,28 @@
+weighted_fisher_permutation <- function(datalist, n_permutations = 100) {
+  pmat <- p_matrix(datalist)
+  n_genes <- nrow(pmat)
+  n_studies <- ncol(pmat)
+
+  # Create all possible weight combinations
+  all_weights <- expand.grid(replicate(n_studies, c(0, 1), simplify = FALSE))
+
+  n_weights <- nrow(all_weights)
+  perm_stats <- matrix(NA, nrow = n_genes, ncol = n_weights)
+
+  # Iterate over all possible weight combinations
+  for (i in 1:n_weights) {
+    w <- as.matrix(all_weights[i, ])
+    for (j in 1:n_genes) {
+      statistic <- sum(w * (-2 * log(pmat[j, ])))
+      perm_statistic <- replicate(n_permutations, {
+        perm_datalist <- lapply(datalist, function(df) df[sample(nrow(df)), ])
+        perm_pmat <- p_matrix(perm_datalist)
+        sum(w * (-2 * log(perm_pmat[j, ])))
+      })
+      p_value <- mean(statistic <= perm_statistic)
+      perm_stats[j, i] <- p_value
+    }
+  }
+
+  return(perm_stats)
+}
