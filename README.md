@@ -17,5 +17,6 @@ Lancaster's method generalized Fisher's method by assignning different weights u
 
 # Reference:  
 
-https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-368
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3135688/
+https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-368   
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3135688/   
