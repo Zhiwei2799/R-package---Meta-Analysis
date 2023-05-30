@@ -15,6 +15,7 @@ ${Z_{weighted~Stouffer}} = \frac{\sum\limits_{i=1}^{k} w_i Z_i}{\sqrt{\sum\limit
 ### Lancaster
 Lancaster's method generalized Fisher's method by assignning different weights using the additivity of chi-squared distribution. ${T = \sum\limits_{i=1}^{k} [X_{n_i}^{2}]^{-1}(1-p_i)}$ where ${[X_{n_i}^{2}]^{-1}}$ is the inverse cumulative chi-square distributon function with ni degrees of freedom
 
-Reference:
+# Reference:  
+
 https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-368
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3135688/
